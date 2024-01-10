@@ -14,10 +14,10 @@ setwd("C:/Users/Marius/OneDrive/Dokumente/UNI Luzern/3._Semester/Stat 101/sbbbfs
 write.csv(sbb, "generalabo_halbtax_sbb.csv", row.names = FALSE)
 
 #swisstopo dataset containing municipalities with their PLZ code (which SBB uses) and their bfs number, which bfs uses
-zipfile<-"https://data.geo.admin.ch/ch.swisstopo-vd.ortschaftenverzeichnis_plz/ortschaftenverzeichnis_plz/ortschaftenverzeichnis_plz_2056.csv.zip"
-csvfile<-"PLZO_CSV_LV95/PLZO_CSV_LV95.csv"
-download.file(url=zipfile, destfile="PLZO_CSV_LV95.csv.zip")
-topo<-read.csv(unzip("PLZO_CSV_LV95.csv.zip", csvfile), sep=";", header=TRUE)
+zipfile<-"https://data.geo.admin.ch/ch.swisstopo-vd.ortschaftenverzeichnis_plz/ortschaftenverzeichnis_plz/ortschaftenverzeichnis_plz_4326.csv.zip"
+csvfile<-"PLZO_CSV_WGS84/PLZO_CSV_WGS84.csv"
+download.file(url=zipfile, destfile="PLZO_CSV_WGS84.csv.zip")
+topo<-read.csv(unzip("PLZO_CSV_WGS84.csv.zip", csvfile), sep=";", header=TRUE)
 
 #bfs regional dataset 1 containing population data from 2011-2013 (realeased 2014, therefore called 2014)
 download.file(url="https://dam-api.bfs.admin.ch/hub/api/dam/assets/2420591/master", destfile="bfsr13.xls",mode="wb")
