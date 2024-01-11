@@ -109,7 +109,7 @@ topo_plz <- topo %>%
     Zusatzziffer = str_c(unique(na.omit(Zusatzziffer)), collapse = " / "),
     Gemeindename = str_c(unique(na.omit(Gemeindename)), collapse = " / "),
     Kantonskürzel = first(Kantonskürzel),
-    BFS_Nr = str_c(unique(na.omit(BFS.Nr)), collapse = " / "),
+    Gemeindecode = list(unique(na.omit(BFS.Nr))),
     E = mean(E, na.rm = TRUE),
     N = mean(N, na.rm = TRUE),
     Sprache = first(Sprache)
@@ -122,8 +122,20 @@ topo_bfsn <- topo %>%
     Zusatzziffer = str_c(unique(na.omit(Zusatzziffer)), collapse = " / "),
     Gemeindename = str_c(unique(na.omit(Gemeindename)), collapse = " / "),
     Kantonskürzel = first(Kantonskürzel),
-    PLZ = str_c(unique(na.omit(PLZ)), collapse = " / "),
+    PLZ = list(unique(na.omit(PLZ))),
     E = mean(E, na.rm = TRUE),
     N = mean(N, na.rm = TRUE),
     Sprache = first(Sprache)
-  )
+  ) %>% 
+  rename(Gemeindecode = BFS.Nr)
+
+#now let's check whether the new topo datasets have the same number of unique PLZs/BFS numbers as the SBB/BFS dataset:
+n_distinct(topo_plz$PLZ)
+n_distinct(sbb$PLZ)
+#the topo_plz and sbb datasets each have 3194 unique PLZs, so I can merge them.
+
+n_distinct(topo_bfsn$Gemeindecode)
+n_distinct(bfsr$Gemeindecode)
+#the topo_bfsn dataset has 2148 unique BFS numbers, but the bfsr dataset has 2440 unique one. I don't know where
+#the difference comes from, but I will merge them anyway and see what happens. Maybe I can find out where the
+#difference comes from later.
