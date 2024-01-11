@@ -95,6 +95,7 @@ bfsr<-bind_rows(year_list, .id = "Jahr")
 #topo needs also some work: multiple municipalities have the same PLZ, but different bfs numbers,
 #and vice versa. First, I will remove all that have the same PLZ and bfs numbers, as they are duplicates.
 topo<-topo %>% 
+  mutate(unique_id = row_number()) %>% 
   distinct(PLZ, BFS.Nr, .keep_all = TRUE)
 
 #there are still multiple occurences of either plz or bfs number. I need to create two versions of this set:
@@ -112,7 +113,8 @@ topo_plz <- topo %>%
     Gemeindecode = list(unique(na.omit(BFS.Nr))),
     E = mean(E, na.rm = TRUE),
     N = mean(N, na.rm = TRUE),
-    Sprache = first(Sprache)
+    Sprache = first(Sprache),
+    unique_id_list = list(unique_id)
   )
 
 topo_bfsn <- topo %>%
@@ -125,9 +127,10 @@ topo_bfsn <- topo %>%
     PLZ = list(unique(na.omit(PLZ))),
     E = mean(E, na.rm = TRUE),
     N = mean(N, na.rm = TRUE),
-    Sprache = first(Sprache)
+    Sprache = first(Sprache),
+    unique_id_list = list(unique_id)
   ) %>% 
-  rename(Gemeindecode = BFS.Nr)
+  rename(Gemeindecode = BFS.Nr) 
 
 #now let's check whether the new topo datasets have the same number of unique PLZs/BFS numbers as the SBB/BFS dataset:
 n_distinct(topo_plz$PLZ)
