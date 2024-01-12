@@ -90,6 +90,7 @@ year_list<-list("2013"=bfsr13, "2014"=bfsr14, "2015"=bfsr15, "2016"=bfsr16, "201
 
 #add all datasets together
 bfsr<-bind_rows(year_list, .id = "Jahr")
+write.csv(bfsr, "bfsr.csv", row.names = FALSE)
 
 
 #topo needs also some work: multiple municipalities have the same PLZ, but different bfs numbers,
