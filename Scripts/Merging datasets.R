@@ -54,6 +54,7 @@ sbb_summarized <- sbb_bfs %>%
     across(all_of(sbbaddcols), sum, na.rm = TRUE),
     across(all_of(sbbperccols), ~ mean(., na.rm = TRUE)),
     across(all_of(sbbcatcols), first, na.rm = TRUE),
+    PLZ=first(PLZ),
     .groups = "drop"
   )
 
@@ -63,5 +64,6 @@ bfs_summarized <- sbb_bfs %>%
   summarize(
     across(all_of(bfsaddcols), sum, na.rm = TRUE),
     across(all_of(bfsperccols), ~ mean(., na.rm = TRUE)),
+    Gemeindecode=first(Gemeindecode),
     .groups = "drop"
   )
