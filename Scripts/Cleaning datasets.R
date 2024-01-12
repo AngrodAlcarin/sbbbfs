@@ -60,14 +60,22 @@ bfsr20<-replace_with_NA(bfsr20)
 
 #change type of column to numeric
 bfsr14$Anzahl.Privathaushalte<-as.numeric(bfsr14$Anzahl.Privathaushalte)
-
+bfsr14<-bfsr14 %>% 
+  rename(Übrige.Parteien=Übrige)
+bfsr13<-bfsr13 %>% 
+  rename(Übrige.Parteien=Übrige)
 #change name to have it harmonized with all other sets
 bfsr19<-bfsr19 %>% 
-  rename(Sozialhilfequote = Sozialhilfequote.3.)
+  rename(Sozialhilfequote = Sozialhilfequote.3.,
+         FDP.2.= FDP.4.)
+bfsr18<-bfsr18 %>% 
+  rename(FDP.2.=FDP.3.)
+bfsr20<-bfsr20 %>% 
+  rename(Gesamtfläche.in.km.=Gesamtfläche.in.km..1.)
 
 #list of the columns to be converted to numeric
 convert_columns<-c("Beschäftigte.total", "im.1..Sektor", "im.1..Sektor.1", "im.2..Sektor", "im.2..Sektor.1", 
-                   "im.3..Sektor", "im.3..Sektor.1", "Arbeitsstätten.total", "Sozialhilfequote")
+                   "im.3..Sektor", "im.3..Sektor.1", "Arbeitsstätten.total", "Sozialhilfequote","Gesamtfläche.in.km.")
 
 # Function to convert character columns to numeric
 convert_to_numeric <- function(df, columns) {
@@ -75,7 +83,7 @@ convert_to_numeric <- function(df, columns) {
     mutate_at(vars(one_of(columns)), as.numeric)
 }
 #list of datasets that need their columns changed to numeric
-dataset_names <- c("bfsr17", "bfsr18", "bfsr19", "bfsr20")
+dataset_names <- c("bfsr13","bfsr14","bfsr15","bfsr16", "bfsr17", "bfsr18", "bfsr19", "bfsr20")
 
 #apply function to all datasets in the list
 for (dataset_name in dataset_names) {
@@ -90,7 +98,7 @@ year_list<-list("2013"=bfsr13, "2014"=bfsr14, "2015"=bfsr15, "2016"=bfsr16, "201
 
 #add all datasets together
 bfsr<-bind_rows(year_list, .id = "Jahr")
-write.csv(bfsr, "bfsr.csv", row.names = FALSE)
+write.csv2(bfsr, "bfsr.csv", row.names = TRUE, sep=";")
 
 
 #topo needs also some work: multiple municipalities have the same PLZ, but different bfs numbers,

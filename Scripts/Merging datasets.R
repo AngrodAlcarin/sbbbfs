@@ -33,4 +33,14 @@ sbbaddcols<-c("Generalabonnement","Halbtaxabonnement","Bevölkerung")
 sbbperccols<-c("anteil_ga_besitzer","anteil_hta_besitzer")
 sbbcatcols<-c("Generalabonnement.Flag","Halbtaxabonnement.Flag")
 
-bfsaddcols<-c("Einwohner","")
+bfsaddcols<-c("Einwohner","Gesamtfläche.in.km.","Beschäftigte.total","im.1..Sektor","im.2..Sektor","im.3..Sektor",
+              "Arbeitsstätten.total","im.1..Sektor.1","im.2..Sektor.1","im.3..Sektor.1","Anzahl.Privathaushalte",
+              "Veränderung.in.ha","Veränderung.in.ha.1")
+bfsperccols<-c("Veränderung.in..","Bevölkerungs.dichte.pro.km.","Ausländer.in..","X0.19.Jahre","X20.64.Jahre",
+               "X65.Jahre.und.mehr","Rohe.Heiratsziffer","Rohe.Scheidungsziffer","Rohe.Geburtenziffer",
+               "Rohe.Sterbeziffer","Durchschnittliche.Haushaltsgrösse.in.Personen","Siedlungsfläche.in..",
+               "Landwirtschaftsfläche.in..","Wald.und.Gehölze.in..","Unproduktive.Fläche.in..",
+               "Leerwohnungs.ziffer","Neu.gebaute.Wohnungen.pro.1000.Einwohner","Sozialhilfequote",
+               "FDP.2.","CVP","SP", "SVP","EVP.CSP","GLP","BDP","PdA.Sol.","GPS","Kleine.Rechtsparteien",
+               "Übrige.Parteien","gemäss.Strafgesetzbuch..StGB..","gemäss.Betäubungsmittelgesetz..BetmG.",
+               "gemäss.Ausländergesetz..AuG.")
