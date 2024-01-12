@@ -99,3 +99,5 @@ bfssbb_sum<-sbb_bfs %>%
     Gemeindecode=first(Gemeindecode),
     .groups = "drop"
   )
+
+write.csv(bfssbb_sum, "bfssbb_sum.csv", row.names = FALSE)
