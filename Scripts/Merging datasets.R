@@ -1,15 +1,31 @@
 library(purrr)
-#now that I have cleaned the datasets, let's merge them. First, I'll merge the sbb dataset with the topo_plz dataset,
-#since they have the same amount of unique PLZs. Then, I'll need to change the plz column to a list, since there are
-#multiple PLZs for each Gemeindecode.
 
-sbb_topo<-merge(sbb, topo_plz, by="PLZ", all.x=TRUE) %>% 
-  mutate(PLZ=as.list(PLZ))
+#now I'll join the topo dataset with the sbb dataset
+n_distinct(topo$PLZ)
+n_distinct(sbb$PLZ)
+
+#the topo dataset has 3194 unique PLZs, same as the sbb dataset with 3194 ones. I can merge them.
+sbb_topo<-merge(sbb, topo, by="PLZ", all.x=TRUE)
+
+#now I'll try the same with the bfs dataset. I'll join it with the topo dataset
+n_distinct(topo$Gemeindecode)
+n_distinct(bfsr$Gemeindecode)
+
+#the topo dataset has 2148 unique Gemeindecodes, but the bfsr dataset has 2440 unique ones. I don't know where
+#the difference comes from, but I will merge them anyway and see what happens. Maybe I can find out where the
+#difference comes from later.
+bfsr_topo<-merge(bfsr, topo, by="Gemeindecode", all.x=TRUE)
+n_distinct(bfsr_topo$Gemeindecode)
 
 #now I'll merge the bfs dataset with the topo_bfsn dataset, but I'll have to be cautious, since they do not have the
 #same amount of unique bfs numbers. I'll have to check which bfs numbers are in the bfs dataset, but not in the topo_bfsn
 bfsr_topo<-merge(bfsr, topo_bfsn, by="Gemeindecode", all.x=TRUE) %>% 
   mutate(Gemeindecode=as.list(Gemeindecode))
+
+
+
+
+
 
 #now I'll merge the sbb_topo dataset with the bfsr_topo dataset. Before I can do that, I need to create two functions
 #that will help me with the merging. The first function will check if an individual Bfs number is part of a list of codes
