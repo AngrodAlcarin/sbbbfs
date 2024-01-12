@@ -37,13 +37,18 @@ bfsaddcols<-c("Einwohner","Gesamtfläche.in.km.","Beschäftigte.total","im.1..Se
               "Arbeitsstätten.total","im.1..Sektor.1","im.2..Sektor.1","im.3..Sektor.1","Anzahl.Privathaushalte",
               "Veränderung.in.ha","Veränderung.in.ha.1")
 bfsperccols<-c("Veränderung.in..","Bevölkerungs.dichte.pro.km.","Ausländer.in..","X0.19.Jahre","X20.64.Jahre",
-               "X65.Jahre.und.mehr","Rohe.Heiratsziffer","Rohe.Scheidungsziffer","Rohe.Geburtenziffer",
+               "X65.Jahre.und.mehr","Rohe.Heiratssziffer","Rohe.Scheidungsziffer","Rohe.Geburtenziffer",
                "Rohe.Sterbeziffer","Durchschnittliche.Haushaltsgrösse.in.Personen","Siedlungsfläche.in..",
-               "Landwirtschaftsfläche.in..","Wald.und.Gehölze.in..","Unproduktive.Fläche.in..",
+               "Landwirtschafts.fläche.in..","Wald.und.Gehölze.in..","Unproduktive.Fläche.in..",
                "Leerwohnungs.ziffer","Neu.gebaute.Wohnungen.pro.1000.Einwohner","Sozialhilfequote",
                "FDP.2.","CVP","SP", "SVP","EVP.CSP","GLP","BDP","PdA.Sol.","GPS","Kleine.Rechtsparteien",
-               "Übrige.Parteien","gemäss.Strafgesetzbuch..StGB..","gemäss.Betäubungsmittelgesetz..BetmG.",
+               "Übrige.Parteien","gemäss.Strafgesetzbuch..StGB..","gemäss.Betäubungsmittel.gesetz..BetmG.",
                "gemäss.Ausländergesetz..AuG.")
+
+#change column types to numeric
+sbb_bfs<-sbb_bfs %>% 
+  mutate(across(all_of(bfsaddcols), as.numeric),
+         across(all_of(bfsperccols), as.numeric))
 
 #now that I have the correct grouping of columns, I can apply different summarizations based on these
 #different groupings. First, I'll group by BFS number and Jahr, and summarize the relevant sbb columns.
@@ -64,6 +69,33 @@ bfs_summarized <- sbb_bfs %>%
   summarize(
     across(all_of(bfsaddcols), sum, na.rm = TRUE),
     across(all_of(bfsperccols), ~ mean(., na.rm = TRUE)),
+    Gemeindecode=first(Gemeindecode),
+    .groups = "drop"
+  )
+
+#now I'll merge the two datasets together
+sbbbfs_sum<-merge(sbb_summarized, bfs_summarized, by=c("PLZ","Gemeindecode", "Jahr"), all.x=TRUE)
+
+
+
+bfssbb_sum<-sbb_bfs %>%
+  group_by(Gemeindecode, Jahr) %>%
+  summarize(
+    across(all_of(sbbaddcols), sum, na.rm = TRUE),
+    across(all_of(sbbperccols), ~ mean(., na.rm = TRUE)),
+    across(all_of(sbbcatcols), first, na.rm = TRUE),
+    across(all_of(bfsaddcols), first, na.rm = TRUE),
+    across(all_of(bfsperccols), first, na.rm = TRUE),
+    PLZ=first(PLZ),
+    .groups = "drop"
+  ) %>% 
+  group_by(PLZ, Jahr) %>%
+  summarize(
+    across(all_of(bfsaddcols), sum, na.rm = TRUE),
+    across(all_of(bfsperccols), ~ mean(., na.rm = TRUE)),
+    across(all_of(sbbaddcols), first, na.rm = TRUE),
+    across(all_of(sbbperccols), first, na.rm = TRUE),
+    across(all_of(sbbcatcols), first, na.rm = TRUE),
     Gemeindecode=first(Gemeindecode),
     .groups = "drop"
   )

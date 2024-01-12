@@ -104,3 +104,12 @@ merge_on_list_column <- function(df1, df2, list_column_name) {
 sbbbfs<-merge_on_list_column(sbb_topo, bfsr_topo, "unique_id_list")
 
 sbbbfs<-merge(sbb_topo, bfsr_topo, by="unique_id_list", all.x=TRUE)
+
+
+bfs_summarized<-bfs_summarized %>% 
+  filter(Jahr>=2013 & Jahr<=2020)
+sbb_summarized<-sbb_summarized %>% 
+  filter(Jahr>=2013 & Jahr<=2020)
+
+bfssbb_sum<-bfssbb_sum %>% 
+  filter(Jahr>=2013 & Jahr<=2020)
