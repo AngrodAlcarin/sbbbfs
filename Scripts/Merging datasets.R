@@ -44,3 +44,24 @@ bfsperccols<-c("Veränderung.in..","Bevölkerungs.dichte.pro.km.","Ausländer.in
                "FDP.2.","CVP","SP", "SVP","EVP.CSP","GLP","BDP","PdA.Sol.","GPS","Kleine.Rechtsparteien",
                "Übrige.Parteien","gemäss.Strafgesetzbuch..StGB..","gemäss.Betäubungsmittelgesetz..BetmG.",
                "gemäss.Ausländergesetz..AuG.")
+
+#now that I have the correct grouping of columns, I can apply different summarizations based on these
+#different groupings. First, I'll group by BFS number and Jahr, and summarize the relevant sbb columns.
+
+sbb_summarized <- sbb_bfs %>%
+  group_by(Gemeindecode, Jahr) %>%
+  summarize(
+    across(all_of(sbbaddcols), sum, na.rm = TRUE),
+    across(all_of(sbbperccols), ~ mean(., na.rm = TRUE)),
+    across(all_of(sbbcatcols), first, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+#now I'll do the same for the bfs columns
+bfs_summarized <- sbb_bfs %>%
+  group_by(PLZ, Jahr) %>%
+  summarize(
+    across(all_of(bfsaddcols), sum, na.rm = TRUE),
+    across(all_of(bfsperccols), ~ mean(., na.rm = TRUE)),
+    .groups = "drop"
+  )
